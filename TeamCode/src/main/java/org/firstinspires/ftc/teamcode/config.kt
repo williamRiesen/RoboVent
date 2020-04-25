@@ -1,0 +1,11 @@
+package org.firstinspires.ftc.teamcode
+
+const val SECONDS_IN_A_MINUTE = 60.0
+const val TRIGGER_THRESHOLD = 20
+const val BASELINE_AIRFLOW_SENSOR_OUTPUT = 490
+const val I_TO_E_RATIO = 0.33
+const val TIDAL_VOLUME_CALIBRATION = 1.0
+const val HIGH_PRESSURE_ALARM_THRESHOLD = 0.75
+const val TACHYPNEA_THRESHOLD = 24
+const val TARGET_EXPIRATORY_SPEED = -300.0
+const val TARGET_INSPIRATORY_SPEED = 300.0
