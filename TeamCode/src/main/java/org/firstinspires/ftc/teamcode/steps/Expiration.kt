@@ -3,14 +3,15 @@ package org.firstinspires.ftc.teamcode.steps
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.PidController
 import org.firstinspires.ftc.teamcode.RoboVent
+import org.firstinspires.ftc.teamcode.TARGET_EXPIRATORY_SPEED
 
 class Expiration : BreathCycleStep {
 
     private val loopTimer = ElapsedTime()
     private var priorPosition = 0
     private val expirationSpeedController = PidController(
-            setPoint = 300.0,
-            initialOutput = -0.2,
+            setPoint = TARGET_EXPIRATORY_SPEED,
+            initialOutput = -0.3,
             kp = 0.0,
             ki = 0.0,
             kd = 0.0

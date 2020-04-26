@@ -9,9 +9,10 @@ const val ALARM_STRIKE_POSITION = 0.12
 
 class RoboVent(hardwareMap: HardwareMap) {
 
-    val rightVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor2")
-    val leftVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor")
+    val rightVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor")
+    val leftVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor2")
     val button: DigitalChannel = hardwareMap.get<DigitalChannel>(DigitalChannel::class.java, "sensor_digital")
+    val buttonLED: DigitalChannel = hardwareMap.get<DigitalChannel>(DigitalChannel::class.java, "LED_digital")
     private val airflowSensor = hardwareMap.get(I2cDeviceSynch::class.java, "airflow_sensor")!!
     val leftKnob = hardwareMap.get(AnalogInput::class.java, "rate_control")
     val rightKnob = hardwareMap.get(AnalogInput::class.java, "volume_control")
@@ -29,6 +30,7 @@ class RoboVent(hardwareMap: HardwareMap) {
     private val returnFlowTimer = ElapsedTime()
     private val bellTimer = ElapsedTime()
     private val silenceTimer = ElapsedTime()
+    private val blinkTimer = ElapsedTime()
     val cycleTimer = ElapsedTime()
 
 
@@ -45,6 +47,7 @@ class RoboVent(hardwareMap: HardwareMap) {
         leftVentMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
         leftVentMotor.direction = DcMotorSimple.Direction.REVERSE
         button.mode = DigitalChannel.Mode.INPUT
+//        buttonLED.mode = DigitalChannel.Mode.OUTPUT
         airflowSensor.engage()
         val manufacturerAddress = I2cAddr.create7bit(0x49)
         airflowSensor.i2cAddress = manufacturerAddress
