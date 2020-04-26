@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode.steps
+
+import org.firstinspires.ftc.teamcode.*
 
 class PostExpiratoryPause : BreathCycleStep {
 
     private val endExpirationHoldPositionController = PidController(
-            setPoint =  0.0,
+            setPoint = 0.0,
             initialOutput = 0.0,
             kp = 0.01,
             ki = 0.0,

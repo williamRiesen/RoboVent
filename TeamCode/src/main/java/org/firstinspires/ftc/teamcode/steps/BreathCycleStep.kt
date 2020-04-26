@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode.steps
+
+import org.firstinspires.ftc.teamcode.RoboVent
 
 interface BreathCycleStep {
 

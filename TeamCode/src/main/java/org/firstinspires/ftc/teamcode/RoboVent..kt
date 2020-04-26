@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode
 
 import com.qualcomm.robotcore.hardware.*
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.teamcode.steps.*
 
 const val ALARM_RESET_POSITION = 0.0
 const val ALARM_STRIKE_POSITION = 0.12
@@ -9,11 +10,11 @@ const val ALARM_STRIKE_POSITION = 0.12
 class RoboVent(hardwareMap: HardwareMap) {
 
     val rightVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor2")
-    private val leftVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor")
-    private val button: DigitalChannel = hardwareMap.get<DigitalChannel>(DigitalChannel::class.java, "sensor_digital")
+    val leftVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor")
+    val button: DigitalChannel = hardwareMap.get<DigitalChannel>(DigitalChannel::class.java, "sensor_digital")
     private val airflowSensor = hardwareMap.get(I2cDeviceSynch::class.java, "airflow_sensor")!!
-    private val rateControl = hardwareMap.get(AnalogInput::class.java, "rate_control")
-    private val volumeControl = hardwareMap.get(AnalogInput::class.java, "volume_control")
+    val leftKnob = hardwareMap.get(AnalogInput::class.java, "rate_control")
+    val rightKnob = hardwareMap.get(AnalogInput::class.java, "volume_control")
     private val alarmBell: Servo = hardwareMap.get(Servo::class.java, "alarm_bell")
 
     var apneaAlarm = false
@@ -32,10 +33,10 @@ class RoboVent(hardwareMap: HardwareMap) {
 
 
     val respiratoryRateSetting
-        get() = rateControl.voltage * 40.0
+        get() = leftKnob.voltage * 40.0
 
     val tidalVolumeSetting
-        get() = volumeControl.voltage * 1600
+        get() = rightKnob.voltage * 1600
 
     val respiratoryRateCounter = RespiratoryRateCounter()
 

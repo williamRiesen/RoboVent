@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode.steps
+
+import org.firstinspires.ftc.teamcode.*
 
 class PostInspiratoryPause(initialTargetPosition: Int) : BreathCycleStep {
 
@@ -10,7 +12,7 @@ class PostInspiratoryPause(initialTargetPosition: Int) : BreathCycleStep {
             kd = 0.0
     )
 
-    override fun checkForTransition(vent: RoboVent): BreathCycleStep{
+    override fun checkForTransition(vent: RoboVent): BreathCycleStep {
         var updatedBreathCycleStep: BreathCycleStep = this
         val cycleTime = SECONDS_IN_A_MINUTE / vent.respiratoryRateSetting
         val startExpirationTime = cycleTime * I_TO_E_RATIO
