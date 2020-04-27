@@ -22,6 +22,13 @@ class Setup : LinearOpMode() {
         telemetry.update()
         calibrateMotorPosition(vent.rightVentMotor)
         Thread.sleep(500)
+        moveToStartPosition(vent.rightVentMotor)
+        moveToStartPosition(vent.leftVentMotor)
+        while(vent.rightVentMotor.isBusy || vent.leftVentMotor.isBusy){
+            Thread.sleep(100)
+        }
+        resetMotor(vent.rightVentMotor)
+        resetMotor(vent.leftVentMotor)
         telemetry.addData("Setup complete", "Touch PLAY arrow on phone to start.")
         telemetry.update()
         Thread.sleep(5000)
@@ -33,6 +40,18 @@ class Setup : LinearOpMode() {
         while (vent.button.state) {
             Thread.sleep(5)
         }
+        motor.power = 0.0
+        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+    }
+
+    private fun moveToStartPosition(motor: DcMotor){
+        motor.targetPosition = CALIBRATION_POSITION_TO_START_POSITION_DISTANCE
+        motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+        motor.power = 0.2
+    }
+
+    private fun resetMotor(motor: DcMotor){
         motor.power = 0.0
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER

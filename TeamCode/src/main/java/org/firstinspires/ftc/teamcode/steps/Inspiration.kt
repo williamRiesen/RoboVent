@@ -10,11 +10,12 @@ class Inspiration : BreathCycleStep {
 
     private val loopTimer = ElapsedTime()
     private var priorPosition = 0
-    private val inspirationSpeedController = PidController(
+
+    override val controller = PidController(
             setPoint = TARGET_INSPIRATORY_SPEED,
-            initialOutput = 0.3,
-            kp = 0.0001,
-            ki = 0.0,
+            initialOutput = 0.28,
+            kp = 0.0, //0.0001,
+            ki = 0.0, //0.0001,
             kd = 0.0
     )
 
@@ -23,7 +24,7 @@ class Inspiration : BreathCycleStep {
         val endInspiratoryPosition = (vent.tidalVolumeSetting * TIDAL_VOLUME_CALIBRATION).toInt()
         if (vent.rightVentMotor.currentPosition > endInspiratoryPosition) {
             updatedBreathCycleStep = vent.postInspiratoryPause
-            inspirationSpeedController.reset()
+            controller.reset()
         }
         return updatedBreathCycleStep
     }
@@ -34,7 +35,7 @@ class Inspiration : BreathCycleStep {
         val currentPosition = vent.rightVentMotor.currentPosition
         val currentSpeed = (currentPosition - priorPosition) / loopTime
         priorPosition = currentPosition
-        val power = inspirationSpeedController.run(currentSpeed)
+        val power = controller.run(currentSpeed)
         if (power > vent.peakPower) vent.peakPower = power
         vent.setPowerBothMotors(power)
         return power

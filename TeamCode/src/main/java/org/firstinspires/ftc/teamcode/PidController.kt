@@ -22,16 +22,19 @@ class PidController(var setPoint: Double,
                     private val kd: Double) {
 
     private val pidTimer = ElapsedTime()
-    private var integralPrior = 0.0
-    private var deltaPrior = 0.0
+    var integralPrior = 0.0
+    var deltaPrior = 0.0
+    var output = 0.0
+    var value = 0.0
 
     fun run(currentValue: Double): Double {
+        value = currentValue
         val timeInterval = pidTimer.seconds()
         pidTimer.reset()
-        val delta = currentValue - setPoint
+        val delta = setPoint - currentValue
         val integral =  integralPrior + delta * timeInterval
         val derivative = (delta - deltaPrior) / timeInterval
-        val output = kp * delta + ki * integral + kd * derivative + initialOutput
+        output = initialOutput + kp * delta  + ki * integral + kd * derivative
         deltaPrior = delta
         integralPrior = integral
         return output

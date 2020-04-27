@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.*
 
 class PostExpiratoryPause : BreathCycleStep {
 
-    private val endExpirationHoldPositionController = PidController(
+    override val controller = PidController(
             setPoint = 0.0,
             initialOutput = 0.0,
             kp = 0.01,
@@ -19,7 +19,7 @@ class PostExpiratoryPause : BreathCycleStep {
             updatedBreathCycleStep = vent.inspiration
             vent.cycleTimer.reset()
             vent.respiratoryRateCounter.recordBreathGiven()
-            endExpirationHoldPositionController.reset()
+            controller.reset()
         }
         return updatedBreathCycleStep
         }

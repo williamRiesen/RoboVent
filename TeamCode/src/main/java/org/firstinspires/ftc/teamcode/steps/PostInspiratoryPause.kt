@@ -4,10 +4,10 @@ import org.firstinspires.ftc.teamcode.*
 
 class PostInspiratoryPause(initialTargetPosition: Int) : BreathCycleStep {
 
-    private val endInspirationHoldPositionController = PidController(
+    override val controller = PidController(
             setPoint = initialTargetPosition.toDouble(),
             initialOutput = 0.0,
-            kp = 0.01,
+            kp = 0.0,
             ki = 0.0,
             kd = 0.0
     )
@@ -18,15 +18,15 @@ class PostInspiratoryPause(initialTargetPosition: Int) : BreathCycleStep {
         val startExpirationTime = cycleTime * I_TO_E_RATIO
         if (vent.cycleTimer.seconds() > startExpirationTime) {
             updatedBreathCycleStep = vent.expiration
-            endInspirationHoldPositionController.reset()
+            controller.reset()
         }
         return updatedBreathCycleStep
     }
 
     override fun runMotors(vent: RoboVent): Double {
-        endInspirationHoldPositionController.setPoint = vent.tidalVolumeSetting * TIDAL_VOLUME_CALIBRATION
+        controller.setPoint = vent.tidalVolumeSetting * TIDAL_VOLUME_CALIBRATION
         vent.setPowerBothMotors(0.0)
-        return endInspirationHoldPositionController.run(vent.rightVentMotor.currentPosition.toDouble())
+        return controller.run(vent.rightVentMotor.currentPosition.toDouble())
     }
 
 

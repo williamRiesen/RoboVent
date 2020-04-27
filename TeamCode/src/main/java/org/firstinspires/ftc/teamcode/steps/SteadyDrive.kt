@@ -3,15 +3,16 @@ package org.firstinspires.ftc.teamcode.steps
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.PidController
 import org.firstinspires.ftc.teamcode.RoboVent
-import org.firstinspires.ftc.teamcode.TARGET_EXPIRATORY_SPEED
 import org.firstinspires.ftc.teamcode.TARGET_INSPIRATORY_SPEED
+import org.firstinspires.ftc.teamcode.TIDAL_VOLUME_CALIBRATION
 
-class Expiration : BreathCycleStep {
+class SteadyDrive : BreathCycleStep {
 
     private val loopTimer = ElapsedTime()
     private var priorPosition = 0
+
     override val controller = PidController(
-            setPoint = TARGET_EXPIRATORY_SPEED,
+            setPoint = TARGET_INSPIRATORY_SPEED,
             initialOutput = 0.28,
             kp = 0.0001,
             ki = 0.0001,
@@ -19,13 +20,7 @@ class Expiration : BreathCycleStep {
     )
 
     override fun checkForTransition(vent: RoboVent): BreathCycleStep {
-        val endExpiratoryPosition = 0
-        var updatedBreathCycleStep: BreathCycleStep = this
-         if (vent.rightVentMotor.currentPosition < endExpiratoryPosition) {
-             updatedBreathCycleStep = vent.postExpiratoryPause
-             controller.reset()
-         }
-        return updatedBreathCycleStep
+        return this
     }
 
     override fun runMotors(vent: RoboVent): Double {
@@ -36,11 +31,11 @@ class Expiration : BreathCycleStep {
         priorPosition = currentPosition
         val power = controller.run(currentSpeed)
         if (power > vent.peakPower) vent.peakPower = power
-//        vent.setPowerBothMotors(power)
-        vent.setPowerBothMotors(-0.2)
+        vent.setPowerBothMotors(power)
         return power
     }
+
     override fun toString(): String {
-        return "Expiration"
+        return "Steady Drive"
     }
 }

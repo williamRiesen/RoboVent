@@ -35,17 +35,17 @@ class RoboVent(hardwareMap: HardwareMap) {
 
 
     val respiratoryRateSetting
-        get() = leftKnob.voltage * 40.0
+        get() = leftKnob.voltage / leftKnob.maxVoltage * 24
 
     val tidalVolumeSetting
-        get() = rightKnob.voltage * 1600
+        get() = rightKnob.voltage / rightKnob.maxVoltage * 1000
 
     val respiratoryRateCounter = RespiratoryRateCounter()
 
     init {
         rightVentMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
         leftVentMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
-        leftVentMotor.direction = DcMotorSimple.Direction.REVERSE
+        rightVentMotor.direction = DcMotorSimple.Direction.REVERSE
         button.mode = DigitalChannel.Mode.INPUT
 //        buttonLED.mode = DigitalChannel.Mode.OUTPUT
         airflowSensor.engage()
@@ -128,7 +128,7 @@ class RoboVent(hardwareMap: HardwareMap) {
     )
 
     private fun synchronizeMotors(power: Double) {
-        val motorDiscrepancy = (rightVentMotor.currentPosition - leftVentMotor.currentPosition).toDouble()
+        val motorDiscrepancy = (leftVentMotor.currentPosition - rightVentMotor.currentPosition).toDouble()
         motorSynchronizer.initialOutput = power
         leftVentMotor.power = motorSynchronizer.run(motorDiscrepancy)
     }
@@ -137,5 +137,6 @@ class RoboVent(hardwareMap: HardwareMap) {
     val postInspiratoryPause: BreathCycleStep = PostInspiratoryPause((tidalVolumeSetting * TIDAL_VOLUME_CALIBRATION).toInt())
     val expiration: BreathCycleStep = Expiration()
     val postExpiratoryPause: BreathCycleStep = PostExpiratoryPause()
+    val steadyDrive: BreathCycleStep = SteadyDrive() // (Diagnostic)
 
 }

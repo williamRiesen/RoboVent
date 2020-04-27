@@ -27,10 +27,11 @@ class AcVentilation: OpMode() {
         currentBreathCycleStep.runMotors(vent)
         vent.updateAlarmConditions()
         vent.updateAlarmBell()
-        updateDisplay()
+        updateDisplay(currentBreathCycleStep)
+        Thread.sleep(20)
     }
 
-    private fun updateDisplay(){
+    private fun updateDisplay(breathCycleStep: BreathCycleStep){
         var alarmString = ""
         if (vent.apneaAlarm) alarmString += "APNEA  "
         if (vent.noReturnFlowAlarm)alarmString += "NO RETURN FLOW  "
@@ -41,6 +42,8 @@ class AcVentilation: OpMode() {
         telemetry.addLine("Resp Rate-  ")
                 .addData("Set", vent.respiratoryRateSetting.toInt())
                 .addData("Actual", vent.respiratoryRateCounter.readRate())
+        telemetry.addLine("Tidal Vol-  ")
+                .addData("Set", vent.tidalVolumeSetting)
         telemetry.update()
     }
 }
