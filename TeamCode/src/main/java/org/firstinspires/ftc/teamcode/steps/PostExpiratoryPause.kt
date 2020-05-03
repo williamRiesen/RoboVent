@@ -18,7 +18,7 @@ class PostExpiratoryPause : BreathCycleStep {
         if (vent.cycleTimer.seconds() > cycleTime || patientTriggers ) {
             updatedBreathCycleStep = vent.inspiration
             vent.cycleTimer.reset()
-            vent.respiratoryRateCounter.recordBreathGiven()
+//            vent.respiratoryRateCounter.recordBreathGiven()
             controller.reset()
         }
         return updatedBreathCycleStep

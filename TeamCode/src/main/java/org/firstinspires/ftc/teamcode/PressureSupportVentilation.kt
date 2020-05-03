@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.steps.BreathCycleStep
 
 
-@TeleOp(name = "Assist / Control", group = "RoboVent")
-class AcVentilation: OpMode() {
+@TeleOp(name = "Pressure Support", group = "RoboVent")
+class PressureSupportVentilation: OpMode() {
     private lateinit var vent: RoboVent
     private lateinit var currentBreathCycleStep: BreathCycleStep
 
@@ -16,8 +16,7 @@ class AcVentilation: OpMode() {
     }
 
     override fun init_loop() {
-        telemetry.addData("Resp Rate Setting: ", vent.respiratoryRateSetting.toInt())
-        telemetry.addData("Tidal Volume Setting: ", vent.tidalVolumeSetting.toInt())
+        telemetry.addData("Pressure Support Setting ", vent.respiratoryRateSetting.toInt())
         telemetry.update()
 //        vent.respiratoryRateCounter.respiratoryRateTimer.reset()
     }

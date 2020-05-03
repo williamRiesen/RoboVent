@@ -7,7 +7,7 @@ class PostInspiratoryPause(initialTargetPosition: Int) : BreathCycleStep {
     override val controller = PidController(
             setPoint = initialTargetPosition.toDouble(),
             initialOutput = 0.0,
-            kp = 0.0,
+            kp = 0.0001,
             ki = 0.0,
             kd = 0.0
     )
@@ -25,8 +25,9 @@ class PostInspiratoryPause(initialTargetPosition: Int) : BreathCycleStep {
 
     override fun runMotors(vent: RoboVent): Double {
         controller.setPoint = vent.tidalVolumeSetting * TIDAL_VOLUME_CALIBRATION
-        vent.setPowerBothMotors(0.0)
-        return controller.run(vent.rightVentMotor.currentPosition.toDouble())
+        val output = controller.run(vent.rightVentMotor.currentPosition.toDouble())
+        vent.setPowerBothMotors(output)
+        return output
     }
 
 

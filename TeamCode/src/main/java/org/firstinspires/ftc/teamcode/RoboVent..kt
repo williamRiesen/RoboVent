@@ -12,7 +12,6 @@ class RoboVent(hardwareMap: HardwareMap) {
     val rightVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor")
     val leftVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor2")
     val button: DigitalChannel = hardwareMap.get<DigitalChannel>(DigitalChannel::class.java, "sensor_digital")
-    val buttonLED: DigitalChannel = hardwareMap.get<DigitalChannel>(DigitalChannel::class.java, "LED_digital")
     private val airflowSensor = hardwareMap.get(I2cDeviceSynch::class.java, "airflow_sensor")!!
     val leftKnob = hardwareMap.get(AnalogInput::class.java, "rate_control")
     val rightKnob = hardwareMap.get(AnalogInput::class.java, "volume_control")
@@ -22,6 +21,8 @@ class RoboVent(hardwareMap: HardwareMap) {
     var noReturnFlowAlarm = false
     var tachypneaAlarm = false
     var highPressureAlarm = false
+
+
     private val alarmsSilenced
         get() = silenceTimer.seconds() < 60
     var peakPower = 0.0
@@ -38,20 +39,19 @@ class RoboVent(hardwareMap: HardwareMap) {
         get() = leftKnob.voltage / leftKnob.maxVoltage * 24
 
     val tidalVolumeSetting
-        get() = rightKnob.voltage / rightKnob.maxVoltage * 1000
+        get() = rightKnob.voltage / rightKnob.maxVoltage * 950
 
-    val respiratoryRateCounter = RespiratoryRateCounter()
+//    val respiratoryRateCounter = RespiratoryRateCounter()
 
     init {
         rightVentMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
         leftVentMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
         rightVentMotor.direction = DcMotorSimple.Direction.REVERSE
         button.mode = DigitalChannel.Mode.INPUT
-//        buttonLED.mode = DigitalChannel.Mode.OUTPUT
         airflowSensor.engage()
         val manufacturerAddress = I2cAddr.create7bit(0x49)
         airflowSensor.i2cAddress = manufacturerAddress
-        respiratoryRateCounter.breathLog.add(0.0)
+//        respiratoryRateCounter.breathLog.add(0.0)
     }
 
 
@@ -68,7 +68,7 @@ class RoboVent(hardwareMap: HardwareMap) {
         apneaAlarm = apneaTimer.seconds() > 10.0
         if (airflow < 250) returnFlowTimer.reset()
         noReturnFlowAlarm = returnFlowTimer.seconds() > 10.0
-        tachypneaAlarm = respiratoryRateCounter.readRate() > TACHYPNEA_THRESHOLD
+//        tachypneaAlarm = respiratoryRateCounter.readRate() > TACHYPNEA_THRESHOLD
     }
 
     fun updateAlarmBell() {
@@ -79,7 +79,7 @@ class RoboVent(hardwareMap: HardwareMap) {
             apneaAlarm -> 4
             noReturnFlowAlarm -> 3
             tachypneaAlarm -> 2
-            highPressureAlarm -> 1
+            highPressureAlarm  -> 1
             else -> 0
         }
         when (bellTimer.seconds()) {
