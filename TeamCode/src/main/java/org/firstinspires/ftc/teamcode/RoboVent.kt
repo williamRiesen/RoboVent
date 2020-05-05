@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode
 import com.qualcomm.robotcore.hardware.*
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.steps.*
-
-const val ALARM_RESET_POSITION = 0.0
-const val ALARM_STRIKE_POSITION = 0.12
+import org.openftc.revextensions2.ExpansionHubEx
 
 class RoboVent(hardwareMap: HardwareMap) {
-
+    private val expansionHubEx: ExpansionHubEx = hardwareMap.get(ExpansionHubEx::class.java, "Expansion Hub 2")
     val rightVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor")
     val leftVentMotor: DcMotor = hardwareMap.get(DcMotor::class.java, "vent_motor2")
     val button: DigitalChannel = hardwareMap.get<DigitalChannel>(DigitalChannel::class.java, "sensor_digital")
@@ -52,6 +50,8 @@ class RoboVent(hardwareMap: HardwareMap) {
         val manufacturerAddress = I2cAddr.create7bit(0x49)
         airflowSensor.i2cAddress = manufacturerAddress
 //        respiratoryRateCounter.breathLog.add(0.0)
+
+        expansionHubEx.isPhoneChargeEnabled = true
     }
 
 
